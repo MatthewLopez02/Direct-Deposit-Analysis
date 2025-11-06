@@ -318,8 +318,135 @@
     </div>
 
     <script>
-        // Sample data - October 2025 (This will be replaced with dynamic data in production)
+        // Real data from Snowflake for multiple date ranges
         const dataCache = {
+            // Last 30 Days (Oct 7 - Nov 6, 2025)
+            '2025-10-07_2025-11-06': {
+                summary: {
+                    uniqueUsers: 12328,
+                    totalTransactions: 37385,
+                    totalVolume: 28945909.23,
+                    avgDeposit: 774.27
+                },
+                buckets: [
+                    { range: '$1-$250', count: 7369 },
+                    { range: '$250-$500', count: 4854 },
+                    { range: '$500-$750', count: 8237 },
+                    { range: '$750-$1,000', count: 6488 },
+                    { range: '$1,000-$1,500', count: 6782 },
+                    { range: '$1,500-$2,500', count: 3151 },
+                    { range: '$2,500+', count: 504 }
+                ],
+                topByFrequency: [
+                    { name: 'DoorDash, Inc.', count: 833, volume: 179344.74 },
+                    { name: 'Amazon Logistics', count: 666, volume: 141213.47 },
+                    { name: 'WELLS FARGO IFI', count: 570, volume: 199727.33 },
+                    { name: 'UBER USA 6787', count: 407, volume: 143749.28 },
+                    { name: 'JPMorgan Chase', count: 395, volume: 100166.83 },
+                    { name: 'DAILYPAY', count: 384, volume: 133113.40 },
+                    { name: 'CARD SERVICES', count: 183, volume: 51669.12 },
+                    { name: 'STRIPE', count: 180, volume: 25443.72 },
+                    { name: 'VIAMERICAS CORP', count: 174, volume: 52131.20 },
+                    { name: 'ARA-1', count: 149, volume: 98484.91 }
+                ],
+                topByVolume: [
+                    { name: 'WELLS FARGO IFI', count: 570, volume: 199727.33 },
+                    { name: 'DoorDash, Inc.', count: 833, volume: 179344.74 },
+                    { name: 'UBER USA 6787', count: 407, volume: 143749.28 },
+                    { name: 'Amazon Logistics', count: 666, volume: 141213.47 },
+                    { name: 'DAILYPAY', count: 384, volume: 133113.40 },
+                    { name: 'TEAM MEMBERS', count: 104, volume: 110888.75 },
+                    { name: 'JPMorgan Chase', count: 395, volume: 100166.83 },
+                    { name: 'MM HR PAYROLL', count: 115, volume: 99684.06 },
+                    { name: 'ARA-1', count: 149, volume: 98484.91 },
+                    { name: 'SSA TREAS 310', count: 84, volume: 90136.90 }
+                ]
+            },
+            // Last 60 Days (Sep 7 - Nov 6, 2025)
+            '2025-09-07_2025-11-06': {
+                summary: {
+                    uniqueUsers: 14454,
+                    totalTransactions: 72935,
+                    totalVolume: 56299541.66,
+                    avgDeposit: 771.91
+                },
+                buckets: [
+                    { range: '$1-$250', count: 14159 },
+                    { range: '$250-$500', count: 9542 },
+                    { range: '$500-$750', count: 16226 },
+                    { range: '$750-$1,000', count: 12898 },
+                    { range: '$1,000-$1,500', count: 13196 },
+                    { range: '$1,500-$2,500', count: 5950 },
+                    { range: '$2,500+', count: 964 }
+                ],
+                topByFrequency: [
+                    { name: 'DoorDash, Inc.', count: 1504, volume: 315979.33 },
+                    { name: 'Amazon Logistics', count: 1212, volume: 260358.58 },
+                    { name: 'WELLS FARGO IFI', count: 1180, volume: 409878.67 },
+                    { name: 'JPMorgan Chase', count: 837, volume: 207192.82 },
+                    { name: 'UBER USA 6787', count: 808, volume: 268490.61 },
+                    { name: 'DAILYPAY', count: 728, volume: 263725.97 },
+                    { name: 'CARD SERVICES', count: 404, volume: 123616.19 },
+                    { name: 'STRIPE', count: 360, volume: 46779.09 },
+                    { name: 'VIAMERICAS CORP', count: 338, volume: 90055.10 },
+                    { name: 'ARA-1', count: 302, volume: 196401.74 }
+                ],
+                topByVolume: [
+                    { name: 'WELLS FARGO IFI', count: 1180, volume: 409878.67 },
+                    { name: 'DoorDash, Inc.', count: 1504, volume: 315979.33 },
+                    { name: 'UBER USA 6787', count: 808, volume: 268490.61 },
+                    { name: 'DAILYPAY', count: 728, volume: 263725.97 },
+                    { name: 'Amazon Logistics', count: 1212, volume: 260358.58 },
+                    { name: 'MM HR PAYROLL', count: 261, volume: 227680.55 },
+                    { name: 'TEAM MEMBERS', count: 211, volume: 226588.44 },
+                    { name: 'JPMorgan Chase', count: 837, volume: 207192.82 },
+                    { name: 'ARA-1', count: 302, volume: 196401.74 },
+                    { name: 'SSA TREAS 310', count: 155, volume: 174464.34 }
+                ]
+            },
+            // Last 90 Days (Aug 8 - Nov 6, 2025)
+            '2025-08-08_2025-11-06': {
+                summary: {
+                    uniqueUsers: 16709,
+                    totalTransactions: 112720,
+                    totalVolume: 87511039.48,
+                    avgDeposit: 776.36
+                },
+                buckets: [
+                    { range: '$1-$250', count: 21153 },
+                    { range: '$250-$500', count: 14717 },
+                    { range: '$500-$750', count: 25270 },
+                    { range: '$750-$1,000', count: 20308 },
+                    { range: '$1,000-$1,500', count: 20595 },
+                    { range: '$1,500-$2,500', count: 9216 },
+                    { range: '$2,500+', count: 1461 }
+                ],
+                topByFrequency: [
+                    { name: 'DoorDash, Inc.', count: 2213, volume: 464558.13 },
+                    { name: 'WELLS FARGO IFI', count: 1818, volume: 615042.03 },
+                    { name: 'Amazon Logistics', count: 1658, volume: 352728.63 },
+                    { name: 'JPMorgan Chase', count: 1317, volume: 334319.60 },
+                    { name: 'UBER USA 6787', count: 1258, volume: 385675.81 },
+                    { name: 'DAILYPAY', count: 1106, volume: 402278.60 },
+                    { name: 'CARD SERVICES', count: 590, volume: 189419.71 },
+                    { name: 'STRIPE', count: 508, volume: 66993.72 },
+                    { name: 'VIAMERICAS CORP', count: 494, volume: 128042.45 },
+                    { name: 'ARA-1', count: 474, volume: 305116.52 }
+                ],
+                topByVolume: [
+                    { name: 'WELLS FARGO IFI', count: 1818, volume: 615042.03 },
+                    { name: 'DoorDash, Inc.', count: 2213, volume: 464558.13 },
+                    { name: 'DAILYPAY', count: 1106, volume: 402278.60 },
+                    { name: 'UBER USA 6787', count: 1258, volume: 385675.81 },
+                    { name: 'Amazon Logistics', count: 1658, volume: 352728.63 },
+                    { name: 'TEAM MEMBERS', count: 321, volume: 347448.91 },
+                    { name: 'MM HR PAYROLL', count: 399, volume: 344139.27 },
+                    { name: 'JPMorgan Chase', count: 1317, volume: 334319.60 },
+                    { name: 'ARA-1', count: 474, volume: 305116.52 },
+                    { name: 'ADP TOTALSOURCE', count: 241, volume: 261396.59 }
+                ]
+            },
+            // October 2025 (Oct 1-31, 2025)
             '2025-10-01_2025-10-31': {
                 summary: {
                     uniqueUsers: 12511,
