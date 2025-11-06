@@ -226,6 +226,13 @@
             </div>
 
             <div class="chart-section">
+                <h2>Users with Direct Deposit by Company Type</h2>
+                <div class="chart-container">
+                    <canvas id="companyTypeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-section">
                 <h2>Direct Deposit Amount Distribution</h2>
                 <div class="chart-container">
                     <canvas id="bucketsChart"></canvas>
@@ -257,11 +264,79 @@
         let bucketsChartInstance = null;
         let frequencyChartInstance = null;
         let volumeChartInstance = null;
+        let companyTypeChartInstance = null;
         let currentPreset = 'last_30';
+
+        // Company type categorization mapping
+        const companyTypeMapping = {
+            'Employers': [
+                'DoorDash, Inc.', 'UBER USA 6787', 'Amazon Logistics', 'AMAZON.COM SVCS', 'WAL-MART ASSOCS.',
+                'TYSON FOODS, INC', 'COMPASS GROUP', 'CHEDRAUI USA INC', 'FUYAO GLASS AMER', 'LAKESIDE FOODS',
+                'UBER USA, LLC', 'RAISER 6795', 'JERDON ENTERPRIS', 'UFP INDUSTRIES I', 'VOSS USA LLC',
+                'LIBERTY CASTING', 'BECHTEL GROUP IN', 'DPR Construction', 'BAKER CONCRETE C', 'ASPEN BUILDERS,',
+                'MIDLAND CONSTRUC', 'ENVIRONMENTAL DE', 'FOX ENTERPRISES,', 'TRADITIONS MANAG', 'Oakridge Nursery',
+                'SUNSHINE DAIRY L', 'TORGINOL INC', 'NEXTGEN HD DRILL', 'SPARTAN COMPANIE', 'KENTUCKY MIRROR',
+                'CREATIVE LIQUID', 'LIQUID STRUCTURE', 'ADVANCED WALLS', 'ALFARO S INDUSTR', 'ASCHER BUILDING',
+                'RSL CONTRACTORS,', 'EMPIRE AG LLC', 'EXPO SERVICES LL', 'Bloom Lawn and L', 'MCPLASTER POOLS',
+                'FOREVER CLEAN PO', 'FLEET EQUIPMENT', 'MIESFELD S TRIAN', 'A R TRIM ENTERPR', 'ABG OPERATING LL',
+                'FULL CIRCLE DAIR', 'DELOREAN QUALITY', 'Todd & Sargent,', 'PROFESSIONAL POW', 'GARDNER-WATSON D',
+                'Gemini Express T', 'RPM INSTALLATION', 'CHEDRAUI USA INC', 'Ouris Mark 8638', 'LARRETT ENERGY S',
+                'Savard Labor & M', '7shifts', 'Miter Payroll', 'TEAM MEMBERS'
+            ],
+            'Staffing Agencies': [
+                'ATLANTA STAFFING', 'Drive Staff Inc', 'LEADERS STAFFING', '3 PROMISE LABOR', 'LUXOR STAFFING',
+                'ARC TALENT SOLUT', 'PEOPLEASE', 'EMP SERV LLC', 'WWR PLACEMENT', 'SENTRY, LLC',
+                'ESSG II (500)', 'Kamps, Inc.-OSV'
+            ],
+            'Payroll Companies / Fintech': [
+                'DAILYPAY', 'STRIPE', 'Square Inc', 'GUSTO', 'GUSTO PAYROLL', 'ADP TOTALSOURCE',
+                'PAYCHEX ADVANCE', 'MM HR PAYROLL', 'MINUTE MEN HR', 'ARA-1', 'BARRETT BUSINESS',
+                'TRH WD PAYROLL Q', 'Coadvantage Reso', 'Partners 1784', 'Wisely ACH', 'Payroll4Const',
+                'EPAY SYSTEMS', 'PR2416 2111 ENDE', 'CARD SERVICES'
+            ],
+            'Financial Institutions': [
+                'WELLS FARGO IFI', 'JPMorgan Chase', 'BANK OF AMERICA', 'CAPITAL ONE', 'STERLING NAT BNK',
+                'AXIOM BANK NA FB', 'FTSB'
+            ],
+            'Government / Treasury Payments': [
+                'SSA  TREAS 310', 'SSI  TREAS 310', 'IRS  TREAS 310'
+            ],
+            'Money Transfer / Remittance Services': [
+                'VIAMERICAS CORP'
+            ]
+        };
+
+        function categorizeInstitution(name) {
+            const cleanName = name.trim();
+            for (const [category, institutions] of Object.entries(companyTypeMapping)) {
+                if (institutions.some(inst => cleanName.includes(inst.trim()) || inst.trim().includes(cleanName))) {
+                    return category;
+                }
+            }
+            return 'Employers'; // Default fallback
+        }
+
+        function calculateCompanyTypeBreakdown(topByVolume) {
+            const breakdown = {
+                'Employers': 0,
+                'Staffing Agencies': 0,
+                'Payroll Companies / Fintech': 0,
+                'Financial Institutions': 0,
+                'Government / Treasury Payments': 0,
+                'Money Transfer / Remittance Services': 0
+            };
+
+            topByVolume.forEach(inst => {
+                const category = categorizeInstitution(inst.name);
+                breakdown[category] += inst.volume;
+            });
+
+            return breakdown;
+        }
 
         // Preset to date range mapping
         const presetDates = {
-            'last_30': null,  // Will be calculated dynamically
+            'last_30': null,
             'last_60': null,
             'last_90': null,
             'august_2025': ['2025-08-01', '2025-08-31'],
@@ -270,7 +345,6 @@
             'november_2025': ['2025-11-01', '2025-11-30']
         };
 
-        // Calculate dynamic date ranges
         function calculateDynamicDates() {
             const today = new Date();
             presetDates.last_30 = [
@@ -287,17 +361,12 @@
             ];
         }
 
-        // Data cache for different date ranges
-        const dataCache = {"2025-10-07_2025-11-06": {"summary": {"uniqueUsers": 12328, "totalTransactions": 37385, "totalVolume": 28945909.23, "avgDeposit": 774.27}, "buckets": [{"range": "$1-$250", "count": 7369}, {"range": "$250-$500", "count": 4854}, {"range": "$500-$750", "count": 8237}, {"range": "$750-$1,000", "count": 6488}, {"range": "$1,000-$1,500", "count": 6782}, {"range": "$1,500-$2,500", "count": 3151}, {"range": "$2,500+", "count": 504}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 833, "volume": 179344.74}, {"name": "Amazon Logistics", "count": 666, "volume": 141213.47}, {"name": "WELLS FARGO IFI", "count": 570, "volume": 199727.33}, {"name": "UBER USA 6787", "count": 407, "volume": 143749.28}, {"name": "JPMorgan Chase", "count": 395, "volume": 100166.83}, {"name": "DAILYPAY", "count": 384, "volume": 133113.4}, {"name": "CARD SERVICES", "count": 183, "volume": 51669.12}, {"name": "STRIPE", "count": 180, "volume": 25443.72}, {"name": "VIAMERICAS CORP", "count": 174, "volume": 52131.2}, {"name": "ARA-1", "count": 149, "volume": 98484.91}], "topByVolume": [{"name": "WELLS FARGO IFI", "count": 570, "volume": 199727.33}, {"name": "DoorDash, Inc.", "count": 833, "volume": 179344.74}, {"name": "UBER USA 6787", "count": 407, "volume": 143749.28}, {"name": "Amazon Logistics", "count": 666, "volume": 141213.47}, {"name": "DAILYPAY", "count": 384, "volume": 133113.4}, {"name": "TEAM MEMBERS", "count": 104, "volume": 110888.75}, {"name": "JPMorgan Chase", "count": 395, "volume": 100166.83}, {"name": "MM HR PAYROLL", "count": 115, "volume": 99684.06}, {"name": "ARA-1", "count": 149, "volume": 98484.91}, {"name": "SSA  TREAS 310", "count": 84, "volume": 90136.9}]}, "2025-09-07_2025-11-06": {"summary": {"uniqueUsers": 14454, "totalTransactions": 72935, "totalVolume": 56299541.66, "avgDeposit": 771.91}, "buckets": [{"range": "$1-$250", "count": 14159}, {"range": "$250-$500", "count": 9542}, {"range": "$500-$750", "count": 16226}, {"range": "$750-$1,000", "count": 12898}, {"range": "$1,000-$1,500", "count": 13196}, {"range": "$1,500-$2,500", "count": 5950}, {"range": "$2,500+", "count": 964}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 1504, "volume": 315979.33}, {"name": "Amazon Logistics", "count": 1212, "volume": 260358.58}, {"name": "WELLS FARGO IFI", "count": 1180, "volume": 409878.67}, {"name": "JPMorgan Chase", "count": 837, "volume": 207192.82}, {"name": "UBER USA 6787", "count": 808, "volume": 268490.61}, {"name": "DAILYPAY", "count": 728, "volume": 263725.97}, {"name": "CARD SERVICES", "count": 404, "volume": 123616.19}, {"name": "STRIPE", "count": 360, "volume": 46779.09}, {"name": "VIAMERICAS CORP", "count": 338, "volume": 90055.1}, {"name": "ARA-1", "count": 302, "volume": 196401.74}], "topByVolume": [{"name": "WELLS FARGO IFI", "count": 1180, "volume": 409878.67}, {"name": "DoorDash, Inc.", "count": 1504, "volume": 315979.33}, {"name": "UBER USA 6787", "count": 808, "volume": 268490.61}, {"name": "DAILYPAY", "count": 728, "volume": 263725.97}, {"name": "Amazon Logistics", "count": 1212, "volume": 260358.58}, {"name": "MM HR PAYROLL", "count": 261, "volume": 227680.55}, {"name": "TEAM MEMBERS", "count": 211, "volume": 226588.44}, {"name": "JPMorgan Chase", "count": 837, "volume": 207192.82}, {"name": "ARA-1", "count": 302, "volume": 196401.74}, {"name": "SSA  TREAS 310", "count": 155, "volume": 174464.34}]}, "2025-08-08_2025-11-06": {"summary": {"uniqueUsers": 16709, "totalTransactions": 112720, "totalVolume": 87511039.48, "avgDeposit": 776.36}, "buckets": [{"range": "$1-$250", "count": 21153}, {"range": "$250-$500", "count": 14717}, {"range": "$500-$750", "count": 25270}, {"range": "$750-$1,000", "count": 20308}, {"range": "$1,000-$1,500", "count": 20595}, {"range": "$1,500-$2,500", "count": 9216}, {"range": "$2,500+", "count": 1461}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 2213, "volume": 464558.13}, {"name": "WELLS FARGO IFI", "count": 1818, "volume": 615042.03}, {"name": "Amazon Logistics", "count": 1658, "volume": 352728.63}, {"name": "JPMorgan Chase", "count": 1317, "volume": 334319.6}, {"name": "UBER USA 6787", "count": 1258, "volume": 385675.81}, {"name": "DAILYPAY", "count": 1106, "volume": 402278.6}, {"name": "CARD SERVICES", "count": 590, "volume": 189419.71}, {"name": "STRIPE", "count": 508, "volume": 66993.72}, {"name": "VIAMERICAS CORP", "count": 494, "volume": 128042.45}, {"name": "ARA-1", "count": 474, "volume": 305116.52}], "topByVolume": [{"name": "WELLS FARGO IFI", "count": 1818, "volume": 615042.03}, {"name": "DoorDash, Inc.", "count": 2213, "volume": 464558.13}, {"name": "DAILYPAY", "count": 1106, "volume": 402278.6}, {"name": "UBER USA 6787", "count": 1258, "volume": 385675.81}, {"name": "Amazon Logistics", "count": 1658, "volume": 352728.63}, {"name": "TEAM MEMBERS", "count": 321, "volume": 347448.91}, {"name": "MM HR PAYROLL", "count": 399, "volume": 344139.27}, {"name": "JPMorgan Chase", "count": 1317, "volume": 334319.6}, {"name": "ARA-1", "count": 474, "volume": 305116.52}, {"name": "ADP TOTALSOURCE", "count": 241, "volume": 261396.59}]}, "2025-08-01_2025-08-31": {"summary": {"uniqueUsers": 12284, "totalTransactions": 39954, "totalVolume": 31414629.32, "avgDeposit": 786.27}, "buckets": [{"range": "$1-$250", "count": 7069}, {"range": "$250-$500", "count": 5183}, {"range": "$500-$750", "count": 9021}, {"range": "$750-$1,000", "count": 7362}, {"range": "$1,000-$1,500", "count": 7485}, {"range": "$1,500-$2,500", "count": 3339}, {"range": "$2,500+", "count": 495}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 702, "volume": 150318.34}, {"name": "WELLS FARGO IFI", "count": 652, "volume": 214974.73}, {"name": "JPMorgan Chase", "count": 477, "volume": 120134.11}, {"name": "Amazon Logistics", "count": 477, "volume": 92647.27}, {"name": "UBER USA 6787", "count": 458, "volume": 122288.27}, {"name": "DAILYPAY", "count": 377, "volume": 140194.25}, {"name": "CARD SERVICES", "count": 188, "volume": 64967.72}, {"name": "Square Inc", "count": 166, "volume": 73308.33}, {"name": "ARA-1", "count": 166, "volume": 105931.96}, {"name": "VIAMERICAS CORP", "count": 159, "volume": 42402.63}], "topByVolume": [{"name": "WELLS FARGO IFI", "count": 652, "volume": 214974.73}, {"name": "DoorDash, Inc.", "count": 702, "volume": 150318.34}, {"name": "DAILYPAY", "count": 377, "volume": 140194.25}, {"name": "UBER USA 6787", "count": 458, "volume": 122288.27}, {"name": "JPMorgan Chase", "count": 477, "volume": 120134.11}, {"name": "SSI  TREAS 310", "count": 143, "volume": 119930.31}, {"name": "MM HR PAYROLL", "count": 137, "volume": 114986.29}, {"name": "GUSTO", "count": 134, "volume": 112977.4}, {"name": "TEAM MEMBERS", "count": 102, "volume": 109555.21}, {"name": "ARA-1", "count": 166, "volume": 105931.96}]}, "2025-09-01_2025-09-30": {"summary": {"uniqueUsers": 12165, "totalTransactions": 35170, "totalVolume": 27008489.79, "avgDeposit": 767.94}, "buckets": [{"range": "$1-$250", "count": 6655}, {"range": "$250-$500", "count": 4660}, {"range": "$500-$750", "count": 7960}, {"range": "$750-$1,000", "count": 6403}, {"range": "$1,000-$1,500", "count": 6304}, {"range": "$1,500-$2,500", "count": 2741}, {"range": "$2,500+", "count": 447}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 691, "volume": 138126.48}, {"name": "WELLS FARGO IFI", "count": 608, "volume": 204395.62}, {"name": "Amazon Logistics", "count": 516, "volume": 113749.36}, {"name": "JPMorgan Chase", "count": 437, "volume": 112668.57}, {"name": "UBER USA 6787", "count": 429, "volume": 125084.59}, {"name": "DAILYPAY", "count": 345, "volume": 133419.27}, {"name": "CARD SERVICES", "count": 207, "volume": 71348.9}, {"name": "STRIPE", "count": 169, "volume": 20855.98}, {"name": "VIAMERICAS CORP", "count": 163, "volume": 35369.58}, {"name": "Square Inc", "count": 162, "volume": 61184.73}], "topByVolume": [{"name": "WELLS FARGO IFI", "count": 608, "volume": 204395.62}, {"name": "DoorDash, Inc.", "count": 691, "volume": 138126.48}, {"name": "DAILYPAY", "count": 345, "volume": 133419.27}, {"name": "UBER USA 6787", "count": 429, "volume": 125084.59}, {"name": "MM HR PAYROLL", "count": 143, "volume": 124926.06}, {"name": "TEAM MEMBERS", "count": 107, "volume": 115653.12}, {"name": "Amazon Logistics", "count": 516, "volume": 113749.36}, {"name": "JPMorgan Chase", "count": 437, "volume": 112668.57}, {"name": "ADP TOTALSOURCE", "count": 76, "volume": 100857.43}, {"name": "ARA-1", "count": 154, "volume": 96363.85}]}, "2025-10-01_2025-10-31": {"summary": {"uniqueUsers": 12273, "totalTransactions": 37564, "totalVolume": 29183975.94, "avgDeposit": 776.91}, "buckets": [{"range": "$1-$250", "count": 7172}, {"range": "$250-$500", "count": 4828}, {"range": "$500-$750", "count": 8431}, {"range": "$750-$1,000", "count": 6620}, {"range": "$1,000-$1,500", "count": 6905}, {"range": "$1,500-$2,500", "count": 3116}, {"range": "$2,500+", "count": 492}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 686, "volume": 145570.68}, {"name": "Amazon Logistics", "count": 634, "volume": 134960.94}, {"name": "WELLS FARGO IFI", "count": 566, "volume": 194212.93}, {"name": "JPMorgan Chase", "count": 394, "volume": 99101.06}, {"name": "DAILYPAY", "count": 388, "volume": 135174.96}, {"name": "UBER USA 6787", "count": 303, "volume": 106591.18}, {"name": "STRIPE", "count": 194, "volume": 26120.38}, {"name": "CARD SERVICES", "count": 187, "volume": 53603.0}, {"name": "VIAMERICAS CORP", "count": 171, "volume": 49219.5}, {"name": "ARA-1", "count": 153, "volume": 99169.77}], "topByVolume": [{"name": "WELLS FARGO IFI", "count": 566, "volume": 194212.93}, {"name": "TEAM MEMBERS", "count": 151, "volume": 162606.82}, {"name": "DoorDash, Inc.", "count": 686, "volume": 145570.68}, {"name": "DAILYPAY", "count": 388, "volume": 135174.96}, {"name": "Amazon Logistics", "count": 634, "volume": 134960.94}, {"name": "MM HR PAYROLL", "count": 152, "volume": 132104.71}, {"name": "UBER USA 6787", "count": 303, "volume": 106591.18}, {"name": "ARA-1", "count": 153, "volume": 99169.77}, {"name": "JPMorgan Chase", "count": 394, "volume": 99101.06}, {"name": "SSA  TREAS 310", "count": 82, "volume": 88874.04}]}, "2025-11-01_2025-11-30": {"summary": {"uniqueUsers": 2166, "totalTransactions": 2442, "totalVolume": 1564174.53, "avgDeposit": 640.53}, "buckets": [{"range": "$1-$250", "count": 873}, {"range": "$250-$500", "count": 349}, {"range": "$500-$750", "count": 348}, {"range": "$750-$1,000", "count": 306}, {"range": "$1,000-$1,500", "count": 334}, {"range": "$1,500-$2,500", "count": 197}, {"range": "$2,500+", "count": 35}], "topByFrequency": [{"name": "DoorDash, Inc.", "count": 151, "volume": 33956.56}, {"name": "Amazon Logistics", "count": 107, "volume": 23602.13}, {"name": "UBER USA 6787", "count": 105, "volume": 37447.89}, {"name": "WELLS FARGO IFI", "count": 81, "volume": 29196.29}, {"name": "SSA  TREAS 310", "count": 59, "volume": 63986.4}, {"name": "JPMorgan Chase", "count": 54, "volume": 15789.02}, {"name": "MINUTE MEN HR", "count": 42, "volume": 36709.15}, {"name": "STRIPE", "count": 37, "volume": 5355.91}, {"name": "VIAMERICAS CORP", "count": 27, "volume": 10384.7}, {"name": "CARD SERVICES", "count": 25, "volume": 7366.85}], "topByVolume": [{"name": "SSA  TREAS 310", "count": 59, "volume": 63986.4}, {"name": "UBER USA 6787", "count": 105, "volume": 37447.89}, {"name": "MINUTE MEN HR", "count": 42, "volume": 36709.15}, {"name": "DoorDash, Inc.", "count": 151, "volume": 33956.56}, {"name": "WELLS FARGO IFI", "count": 81, "volume": 29196.29}, {"name": "Amazon Logistics", "count": 107, "volume": 23602.13}, {"name": "FULL CIRCLE DAIR", "count": 10, "volume": 19244.38}, {"name": "JPMorgan Chase", "count": 54, "volume": 15789.02}, {"name": "Oakridge Nursery", "count": 7, "volume": 13327.73}, {"name": "TRH WD PAYROLL Q", "count": 21, "volume": 11325.91}]}};
+        const dataCache = {"2025-10-07_2025-11-06":{"summary":{"uniqueUsers":12328,"totalTransactions":37385,"totalVolume":28945909.23,"avgDeposit":774.27},"buckets":[{"range":"$1-$250","count":7369},{"range":"$250-$500","count":4854},{"range":"$500-$750","count":8237},{"range":"$750-$1,000","count":6488},{"range":"$1,000-$1,500","count":6782},{"range":"$1,500-$2,500","count":3151},{"range":"$2,500+","count":504}],"topByFrequency":[{"name":"DoorDash, Inc.","count":833,"volume":179344.74},{"name":"Amazon Logistics","count":666,"volume":141213.47},{"name":"WELLS FARGO IFI","count":570,"volume":199727.33},{"name":"UBER USA 6787","count":407,"volume":143749.28},{"name":"JPMorgan Chase","count":395,"volume":100166.83},{"name":"DAILYPAY","count":384,"volume":133113.4},{"name":"CARD SERVICES","count":183,"volume":51669.12},{"name":"STRIPE","count":180,"volume":25443.72},{"name":"VIAMERICAS CORP","count":174,"volume":52131.2},{"name":"ARA-1","count":149,"volume":98484.91}],"topByVolume":[{"name":"WELLS FARGO IFI","count":570,"volume":199727.33},{"name":"DoorDash, Inc.","count":833,"volume":179344.74},{"name":"UBER USA 6787","count":407,"volume":143749.28},{"name":"Amazon Logistics","count":666,"volume":141213.47},{"name":"DAILYPAY","count":384,"volume":133113.4},{"name":"TEAM MEMBERS","count":104,"volume":110888.75},{"name":"JPMorgan Chase","count":395,"volume":100166.83},{"name":"MM HR PAYROLL","count":115,"volume":99684.06},{"name":"ARA-1","count":149,"volume":98484.91},{"name":"SSA  TREAS 310","count":84,"volume":90136.9}]},"2025-09-07_2025-11-06":{"summary":{"uniqueUsers":14454,"totalTransactions":72935,"totalVolume":56299541.66,"avgDeposit":771.91},"buckets":[{"range":"$1-$250","count":14159},{"range":"$250-$500","count":9542},{"range":"$500-$750","count":16226},{"range":"$750-$1,000","count":12898},{"range":"$1,000-$1,500","count":13196},{"range":"$1,500-$2,500","count":5950},{"range":"$2,500+","count":964}],"topByFrequency":[{"name":"DoorDash, Inc.","count":1504,"volume":315979.33},{"name":"Amazon Logistics","count":1212,"volume":260358.58},{"name":"WELLS FARGO IFI","count":1180,"volume":409878.67},{"name":"JPMorgan Chase","count":837,"volume":207192.82},{"name":"UBER USA 6787","count":808,"volume":268490.61},{"name":"DAILYPAY","count":728,"volume":263725.97},{"name":"CARD SERVICES","count":404,"volume":123616.19},{"name":"STRIPE","count":360,"volume":46779.09},{"name":"VIAMERICAS CORP","count":338,"volume":90055.1},{"name":"ARA-1","count":302,"volume":196401.74}],"topByVolume":[{"name":"WELLS FARGO IFI","count":1180,"volume":409878.67},{"name":"DoorDash, Inc.","count":1504,"volume":315979.33},{"name":"UBER USA 6787","count":808,"volume":268490.61},{"name":"DAILYPAY","count":728,"volume":263725.97},{"name":"Amazon Logistics","count":1212,"volume":260358.58},{"name":"MM HR PAYROLL","count":261,"volume":227680.55},{"name":"TEAM MEMBERS","count":211,"volume":226588.44},{"name":"JPMorgan Chase","count":837,"volume":207192.82},{"name":"ARA-1","count":302,"volume":196401.74},{"name":"SSA  TREAS 310","count":155,"volume":174464.34}]},"2025-08-08_2025-11-06":{"summary":{"uniqueUsers":16709,"totalTransactions":112720,"totalVolume":87511039.48,"avgDeposit":776.36},"buckets":[{"range":"$1-$250","count":21153},{"range":"$250-$500","count":14717},{"range":"$500-$750","count":25270},{"range":"$750-$1,000","count":20308},{"range":"$1,000-$1,500","count":20595},{"range":"$1,500-$2,500","count":9216},{"range":"$2,500+","count":1461}],"topByFrequency":[{"name":"DoorDash, Inc.","count":2213,"volume":464558.13},{"name":"WELLS FARGO IFI","count":1818,"volume":615042.03},{"name":"Amazon Logistics","count":1658,"volume":352728.63},{"name":"JPMorgan Chase","count":1317,"volume":334319.6},{"name":"UBER USA 6787","count":1258,"volume":385675.81},{"name":"DAILYPAY","count":1106,"volume":402278.6},{"name":"CARD SERVICES","count":590,"volume":189419.71},{"name":"STRIPE","count":508,"volume":66993.72},{"name":"VIAMERICAS CORP","count":494,"volume":128042.45},{"name":"ARA-1","count":474,"volume":305116.52}],"topByVolume":[{"name":"WELLS FARGO IFI","count":1818,"volume":615042.03},{"name":"DoorDash, Inc.","count":2213,"volume":464558.13},{"name":"DAILYPAY","count":1106,"volume":402278.6},{"name":"UBER USA 6787","count":1258,"volume":385675.81},{"name":"Amazon Logistics","count":1658,"volume":352728.63},{"name":"TEAM MEMBERS","count":321,"volume":347448.91},{"name":"MM HR PAYROLL","count":399,"volume":344139.27},{"name":"JPMorgan Chase","count":1317,"volume":334319.6},{"name":"ARA-1","count":474,"volume":305116.52},{"name":"ADP TOTALSOURCE","count":241,"volume":261396.59}]},"2025-08-01_2025-08-31":{"summary":{"uniqueUsers":12284,"totalTransactions":39954,"totalVolume":31414629.32,"avgDeposit":786.27},"buckets":[{"range":"$1-$250","count":7069},{"range":"$250-$500","count":5183},{"range":"$500-$750","count":9021},{"range":"$750-$1,000","count":7362},{"range":"$1,000-$1,500","count":7485},{"range":"$1,500-$2,500","count":3339},{"range":"$2,500+","count":495}],"topByFrequency":[{"name":"DoorDash, Inc.","count":702,"volume":150318.34},{"name":"WELLS FARGO IFI","count":652,"volume":214974.73},{"name":"JPMorgan Chase","count":477,"volume":120134.11},{"name":"Amazon Logistics","count":477,"volume":92647.27},{"name":"UBER USA 6787","count":458,"volume":122288.27},{"name":"DAILYPAY","count":377,"volume":140194.25},{"name":"CARD SERVICES","count":188,"volume":64967.72},{"name":"Square Inc","count":166,"volume":73308.33},{"name":"ARA-1","count":166,"volume":105931.96},{"name":"VIAMERICAS CORP","count":159,"volume":42402.63}],"topByVolume":[{"name":"WELLS FARGO IFI","count":652,"volume":214974.73},{"name":"DoorDash, Inc.","count":702,"volume":150318.34},{"name":"DAILYPAY","count":377,"volume":140194.25},{"name":"UBER USA 6787","count":458,"volume":122288.27},{"name":"JPMorgan Chase","count":477,"volume":120134.11},{"name":"SSI  TREAS 310","count":143,"volume":119930.31},{"name":"MM HR PAYROLL","count":137,"volume":114986.29},{"name":"GUSTO","count":134,"volume":112977.4},{"name":"TEAM MEMBERS","count":102,"volume":109555.21},{"name":"ARA-1","count":166,"volume":105931.96}]},"2025-09-01_2025-09-30":{"summary":{"uniqueUsers":12165,"totalTransactions":35170,"totalVolume":27008489.79,"avgDeposit":767.94},"buckets":[{"range":"$1-$250","count":6655},{"range":"$250-$500","count":4660},{"range":"$500-$750","count":7960},{"range":"$750-$1,000","count":6403},{"range":"$1,000-$1,500","count":6304},{"range":"$1,500-$2,500","count":2741},{"range":"$2,500+","count":447}],"topByFrequency":[{"name":"DoorDash, Inc.","count":691,"volume":138126.48},{"name":"WELLS FARGO IFI","count":608,"volume":204395.62},{"name":"Amazon Logistics","count":516,"volume":113749.36},{"name":"JPMorgan Chase","count":437,"volume":112668.57},{"name":"UBER USA 6787","count":429,"volume":125084.59},{"name":"DAILYPAY","count":345,"volume":133419.27},{"name":"CARD SERVICES","count":207,"volume":71348.9},{"name":"STRIPE","count":169,"volume":20855.98},{"name":"VIAMERICAS CORP","count":163,"volume":35369.58},{"name":"Square Inc","count":162,"volume":61184.73}],"topByVolume":[{"name":"WELLS FARGO IFI","count":608,"volume":204395.62},{"name":"DoorDash, Inc.","count":691,"volume":138126.48},{"name":"DAILYPAY","count":345,"volume":133419.27},{"name":"UBER USA 6787","count":429,"volume":125084.59},{"name":"MM HR PAYROLL","count":143,"volume":124926.06},{"name":"TEAM MEMBERS","count":107,"volume":115653.12},{"name":"Amazon Logistics","count":516,"volume":113749.36},{"name":"JPMorgan Chase","count":437,"volume":112668.57},{"name":"ADP TOTALSOURCE","count":76,"volume":100857.43},{"name":"ARA-1","count":154,"volume":96363.85}]},"2025-10-01_2025-10-31":{"summary":{"uniqueUsers":12273,"totalTransactions":37564,"totalVolume":29183975.94,"avgDeposit":776.91},"buckets":[{"range":"$1-$250","count":7172},{"range":"$250-$500","count":4828},{"range":"$500-$750","count":8431},{"range":"$750-$1,000","count":6620},{"range":"$1,000-$1,500","count":6905},{"range":"$1,500-$2,500","count":3116},{"range":"$2,500+","count":492}],"topByFrequency":[{"name":"DoorDash, Inc.","count":686,"volume":145570.68},{"name":"Amazon Logistics","count":634,"volume":134960.94},{"name":"WELLS FARGO IFI","count":566,"volume":194212.93},{"name":"JPMorgan Chase","count":394,"volume":99101.06},{"name":"DAILYPAY","count":388,"volume":135174.96},{"name":"UBER USA 6787","count":303,"volume":106591.18},{"name":"STRIPE","count":194,"volume":26120.38},{"name":"CARD SERVICES","count":187,"volume":53603},{"name":"VIAMERICAS CORP","count":171,"volume":49219.5},{"name":"ARA-1","count":153,"volume":99169.77}],"topByVolume":[{"name":"WELLS FARGO IFI","count":566,"volume":194212.93},{"name":"TEAM MEMBERS","count":151,"volume":162606.82},{"name":"DoorDash, Inc.","count":686,"volume":145570.68},{"name":"DAILYPAY","count":388,"volume":135174.96},{"name":"Amazon Logistics","count":634,"volume":134960.94},{"name":"MM HR PAYROLL","count":152,"volume":132104.71},{"name":"UBER USA 6787","count":303,"volume":106591.18},{"name":"ARA-1","count":153,"volume":99169.77},{"name":"JPMorgan Chase","count":394,"volume":99101.06},{"name":"SSA  TREAS 310","count":82,"volume":88874.04}]},"2025-11-01_2025-11-30":{"summary":{"uniqueUsers":2166,"totalTransactions":2442,"totalVolume":1564174.53,"avgDeposit":640.53},"buckets":[{"range":"$1-$250","count":873},{"range":"$250-$500","count":349},{"range":"$500-$750","count":348},{"range":"$750-$1,000","count":306},{"range":"$1,000-$1,500","count":334},{"range":"$1,500-$2,500","count":197},{"range":"$2,500+","count":35}],"topByFrequency":[{"name":"DoorDash, Inc.","count":151,"volume":33956.56},{"name":"Amazon Logistics","count":107,"volume":23602.13},{"name":"UBER USA 6787","count":105,"volume":37447.89},{"name":"WELLS FARGO IFI","count":81,"volume":29196.29},{"name":"SSA  TREAS 310","count":59,"volume":63986.4},{"name":"JPMorgan Chase","count":54,"volume":15789.02},{"name":"MINUTE MEN HR","count":42,"volume":36709.15},{"name":"STRIPE","count":37,"volume":5355.91},{"name":"VIAMERICAS CORP","count":27,"volume":10384.7},{"name":"CARD SERVICES","count":25,"volume":7366.85}],"topByVolume":[{"name":"SSA  TREAS 310","count":59,"volume":63986.4},{"name":"UBER USA 6787","count":105,"volume":37447.89},{"name":"MINUTE MEN HR","count":42,"volume":36709.15},{"name":"DoorDash, Inc.","count":151,"volume":33956.56},{"name":"WELLS FARGO IFI","count":81,"volume":29196.29},{"name":"Amazon Logistics","count":107,"volume":23602.13},{"name":"FULL CIRCLE DAIR","count":10,"volume":19244.38},{"name":"JPMorgan Chase","count":54,"volume":15789.02},{"name":"Oakridge Nursery","count":7,"volume":13327.73},{"name":"TRH WD PAYROLL Q","count":21,"volume":11325.91}]}};
 
         function setPreset(presetName) {
             currentPreset = presetName;
-
-            // Update active button
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-
-            // Update data
             updateData();
         }
 
@@ -305,11 +374,9 @@
             calculateDynamicDates();
             const dates = presetDates[currentPreset];
             const cacheKey = `${dates[0]}_${dates[1]}`;
-
             let data = dataCache[cacheKey];
 
             if (!data) {
-                // Fallback to last 30 days if no data available
                 const fallbackDates = presetDates.last_30;
                 const fallbackKey = `${fallbackDates[0]}_${fallbackDates[1]}`;
                 data = dataCache[fallbackKey];
@@ -330,12 +397,61 @@
         }
 
         function updateCharts(data) {
-            // Destroy existing charts
             if (bucketsChartInstance) bucketsChartInstance.destroy();
             if (frequencyChartInstance) frequencyChartInstance.destroy();
             if (volumeChartInstance) volumeChartInstance.destroy();
+            if (companyTypeChartInstance) companyTypeChartInstance.destroy();
 
-            // Create buckets chart
+            // Company Type Pie Chart
+            const companyBreakdown = calculateCompanyTypeBreakdown(data.topByVolume);
+            const companyTypeCtx = document.getElementById('companyTypeChart').getContext('2d');
+            companyTypeChartInstance = new Chart(companyTypeCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(companyBreakdown),
+                    datasets: [{
+                        data: Object.values(companyBreakdown),
+                        backgroundColor: [
+                            '#22c55e',  // Employers - Green
+                            '#fbbf24',  // Staffing Agencies - Yellow
+                            '#f97316',  // Payroll/Fintech - Orange
+                            '#3b82f6',  // Financial Institutions - Blue
+                            '#a855f7',  // Government - Purple
+                            '#ec4899'   // Money Transfer - Pink
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${label}: $${value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Buckets Chart
             const bucketsCtx = document.getElementById('bucketsChart').getContext('2d');
             bucketsChartInstance = new Chart(bucketsCtx, {
                 type: 'bar',
@@ -370,7 +486,7 @@
                 }
             });
 
-            // Create frequency chart
+            // Frequency Chart
             const frequencyCtx = document.getElementById('frequencyChart').getContext('2d');
             frequencyChartInstance = new Chart(frequencyCtx, {
                 type: 'bar',
@@ -401,7 +517,7 @@
                 }
             });
 
-            // Create volume chart
+            // Volume Chart
             const volumeCtx = document.getElementById('volumeChart').getContext('2d');
             volumeChartInstance = new Chart(volumeCtx, {
                 type: 'bar',
@@ -456,7 +572,6 @@
             return '$' + num.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
 
-        // Initialize with last 30 days data
         window.onload = function() {
             updateData();
         };
