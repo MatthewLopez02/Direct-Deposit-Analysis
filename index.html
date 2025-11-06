@@ -16,8 +16,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2rem;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
@@ -29,65 +29,66 @@
             overflow: hidden;
         }
 
-        .header {
+        header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 3rem 2rem;
+            padding: 40px;
             text-align: center;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
             font-weight: 700;
         }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.95;
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
         }
 
-        .date-selector-container {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-bottom: 2px solid #e9ecef;
+        .content {
+            padding: 40px;
         }
 
         .date-selector {
-            max-width: 1000px;
-            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .date-selector h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
+        .date-selector h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
         }
 
         .preset-buttons {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 10px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         .preset-btn {
-            padding: 0.75rem 1.5rem;
-            border: 2px solid #667eea;
+            padding: 12px 24px;
             background: white;
-            color: #667eea;
+            border: 2px solid #667eea;
             border-radius: 8px;
+            color: #667eea;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1em;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .preset-btn:hover {
             background: #667eea;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .preset-btn.active {
@@ -95,9 +96,9 @@
             color: white;
         }
 
-        .custom-date-inputs {
+        .custom-dates {
             display: flex;
-            gap: 1rem;
+            gap: 15px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -105,132 +106,126 @@
         .date-input-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 5px;
         }
 
         .date-input-group label {
+            color: #495057;
+            font-size: 0.9em;
             font-weight: 600;
-            color: #555;
-            font-size: 0.9rem;
         }
 
         .date-input-group input {
-            padding: 0.75rem;
-            border: 2px solid #ddd;
+            padding: 10px;
+            border: 2px solid #dee2e6;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 1em;
         }
 
         .apply-btn {
-            padding: 0.75rem 2rem;
+            padding: 10px 30px;
             background: #667eea;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1em;
             font-weight: 600;
-            margin-top: 1.5rem;
-            transition: all 0.3s ease;
+            margin-top: 20px;
+            transition: all 0.3s;
         }
 
         .apply-btn:hover {
-            background: #5568d3;
+            background: #764ba2;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .summary-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            padding: 2rem;
-            background: #f8f9fa;
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
-        .summary-card {
-            background: white;
-            padding: 1.5rem;
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-left: 4px solid #667eea;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .summary-card h3 {
-            color: #666;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+        .card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
-        .summary-card .value {
-            color: #333;
-            font-size: 2rem;
+        .card .value {
+            font-size: 2em;
             font-weight: 700;
-        }
-
-        .charts-container {
-            padding: 2rem;
+            margin-bottom: 5px;
         }
 
         .chart-section {
-            margin-bottom: 3rem;
-            background: white;
-            padding: 2rem;
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .chart-section h2 {
-            color: #333;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #e9ecef;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
         }
 
-        .chart-section p {
-            color: #666;
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-        }
-
-        .chart-wrapper {
+        .chart-container {
             position: relative;
             height: 400px;
-            margin-top: 1rem;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
         }
 
-        .footer {
-            background: #2d3748;
-            color: white;
-            padding: 2rem;
+        footer {
             text-align: center;
-        }
-
-        .footer p {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: #667eea;
-            font-size: 1.2rem;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
             body {
-                padding: 1rem;
+                padding: 10px;
             }
 
-            .header h1 {
-                font-size: 1.8rem;
+            h1 {
+                font-size: 1.8em;
             }
 
-            .chart-wrapper {
+            .content {
+                padding: 20px;
+            }
+
+            .preset-buttons {
+                flex-direction: column;
+            }
+
+            .preset-btn {
+                width: 100%;
+            }
+
+            .custom-dates {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .chart-container {
                 height: 300px;
             }
         }
@@ -238,21 +233,21 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <header>
             <h1>Direct Deposit Analysis</h1>
-            <p>Comprehensive insights into ACH/Direct Deposit patterns and institutions</p>
-        </div>
+            <p class="subtitle">ACH Transaction Insights & Trends</p>
+        </header>
 
-        <div class="date-selector-container">
+        <div class="content">
             <div class="date-selector">
-                <h3>Select Date Range</h3>
+                <h2>Select Date Range</h2>
                 <div class="preset-buttons">
                     <button class="preset-btn" onclick="setPreset(30)">Last 30 Days</button>
                     <button class="preset-btn" onclick="setPreset(60)">Last 60 Days</button>
                     <button class="preset-btn" onclick="setPreset(90)">Last 90 Days</button>
-                    <button class="preset-btn active" onclick="setOctober2025()">October 2025</button>
+                    <button class="preset-btn active" onclick="setOctoberPreset()">October 2025</button>
                 </div>
-                <div class="custom-date-inputs">
+                <div class="custom-dates">
                     <div class="date-input-group">
                         <label for="startDate">Start Date</label>
                         <input type="date" id="startDate" value="2025-10-01">
@@ -264,63 +259,65 @@
                 </div>
                 <button class="apply-btn" onclick="updateData()">Apply Date Range</button>
             </div>
-        </div>
 
-        <div class="summary-cards">
-            <div class="summary-card">
-                <h3>Unique Users</h3>
-                <div class="value" id="uniqueUsers">-</div>
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Unique Users</h3>
+                    <div class="value" id="uniqueUsers">12,511</div>
+                    <p>with Direct Deposits</p>
+                </div>
+                <div class="card">
+                    <h3>Total Transactions</h3>
+                    <div class="value" id="totalTransactions">42,949</div>
+                    <p>ACH deposits received</p>
+                </div>
+                <div class="card">
+                    <h3>Total Volume</h3>
+                    <div class="value" id="totalVolume">$33.9M</div>
+                    <p>in direct deposits</p>
+                </div>
+                <div class="card">
+                    <h3>Average Deposit</h3>
+                    <div class="value" id="avgDeposit">$789.90</div>
+                    <p>per transaction</p>
+                </div>
             </div>
-            <div class="summary-card">
-                <h3>Total Transactions</h3>
-                <div class="value" id="totalTransactions">-</div>
-            </div>
-            <div class="summary-card">
-                <h3>Total Volume</h3>
-                <div class="value" id="totalVolume">-</div>
-            </div>
-            <div class="summary-card">
-                <h3>Average Deposit</h3>
-                <div class="value" id="avgDeposit">-</div>
-            </div>
-        </div>
 
-        <div class="charts-container">
             <div class="chart-section">
-                <h2>Transaction Amount Distribution</h2>
-                <p>Distribution of direct deposit amounts by bucket ranges</p>
-                <div class="chart-wrapper">
-                    <canvas id="amountBucketsChart"></canvas>
+                <h2>Direct Deposit Amount Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="bucketsChart"></canvas>
                 </div>
             </div>
 
             <div class="chart-section">
                 <h2>Top 10 ACH Institutions by Frequency</h2>
-                <p>Most common institutions sending direct deposits (by transaction count)</p>
-                <div class="chart-wrapper">
+                <div class="chart-container">
                     <canvas id="frequencyChart"></canvas>
                 </div>
             </div>
 
             <div class="chart-section">
                 <h2>Top 10 ACH Institutions by Volume</h2>
-                <p>Highest volume institutions sending direct deposits (by total dollar amount)</p>
-                <div class="chart-wrapper">
+                <div class="chart-container">
                     <canvas id="volumeChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <div class="footer">
-            <p>Direct Deposit Analysis Report | Data Source: MART_SRDF_POSTED_TRANSACTIONS (Transaction Code: PMOF)</p>
-            <p>Created by: Paid Ads Team | Generated: November 2025</p>
-        </div>
+        <footer>
+            <p>Created by: Paid Ads Team</p>
+        </footer>
     </div>
 
     <script>
-        // Real data from Snowflake for multiple date ranges
+        let bucketsChartInstance = null;
+        let frequencyChartInstance = null;
+        let volumeChartInstance = null;
+
+        // Data cache for different date ranges
         const dataCache = {
-            // Last 30 Days (Oct 7 - Nov 6, 2025)
+            // Last 30 Days: Oct 7 - Nov 6, 2025
             '2025-10-07_2025-11-06': {
                 summary: {
                     uniqueUsers: 12328,
@@ -331,217 +328,205 @@
                 buckets: [
                     { range: '$1-$250', count: 7369 },
                     { range: '$250-$500', count: 4854 },
-                    { range: '$500-$750', count: 8237 },
-                    { range: '$750-$1,000', count: 6488 },
-                    { range: '$1,000-$1,500', count: 6782 },
-                    { range: '$1,500-$2,500', count: 3151 },
-                    { range: '$2,500+', count: 504 }
+                    { range: '$500-$750', count: 4199 },
+                    { range: '$750-$1,000', count: 5668 },
+                    { range: '$1,000-$1,500', count: 8609 },
+                    { range: '$1,500-$2,500', count: 5537 },
+                    { range: '$2,500+', count: 1149 }
                 ],
                 topByFrequency: [
                     { name: 'DoorDash, Inc.', count: 833, volume: 179344.74 },
-                    { name: 'Amazon Logistics', count: 666, volume: 141213.47 },
+                    { name: 'Amazon Logistics', count: 688, volume: 87893.94 },
                     { name: 'WELLS FARGO IFI', count: 570, volume: 199727.33 },
-                    { name: 'UBER USA 6787', count: 407, volume: 143749.28 },
-                    { name: 'JPMorgan Chase', count: 395, volume: 100166.83 },
-                    { name: 'DAILYPAY', count: 384, volume: 133113.40 },
-                    { name: 'CARD SERVICES', count: 183, volume: 51669.12 },
-                    { name: 'STRIPE', count: 180, volume: 25443.72 },
-                    { name: 'VIAMERICAS CORP', count: 174, volume: 52131.20 },
-                    { name: 'ARA-1', count: 149, volume: 98484.91 }
+                    { name: 'Amazon.com SVCS LLC', count: 524, volume: 92439.84 },
+                    { name: 'JPMorgan Chase Bank', count: 383, volume: 142682.31 },
+                    { name: 'INSTACART', count: 371, volume: 90866.12 },
+                    { name: 'INSTACART INC', count: 357, volume: 127862.59 },
+                    { name: 'JPMORGAN CHASE', count: 352, volume: 157636.62 },
+                    { name: 'DAILYPAY', count: 340, volume: 134835.39 },
+                    { name: 'UBER USA LLC', count: 337, volume: 73577.33 }
                 ],
                 topByVolume: [
                     { name: 'WELLS FARGO IFI', count: 570, volume: 199727.33 },
                     { name: 'DoorDash, Inc.', count: 833, volume: 179344.74 },
-                    { name: 'UBER USA 6787', count: 407, volume: 143749.28 },
-                    { name: 'Amazon Logistics', count: 666, volume: 141213.47 },
-                    { name: 'DAILYPAY', count: 384, volume: 133113.40 },
-                    { name: 'TEAM MEMBERS', count: 104, volume: 110888.75 },
-                    { name: 'JPMorgan Chase', count: 395, volume: 100166.83 },
-                    { name: 'MM HR PAYROLL', count: 115, volume: 99684.06 },
-                    { name: 'ARA-1', count: 149, volume: 98484.91 },
-                    { name: 'SSA TREAS 310', count: 84, volume: 90136.90 }
+                    { name: 'JPMORGAN CHASE', count: 352, volume: 157636.62 },
+                    { name: 'JPMorgan Chase Bank', count: 383, volume: 142682.31 },
+                    { name: 'DAILYPAY', count: 340, volume: 134835.39 },
+                    { name: 'INSTACART INC', count: 357, volume: 127862.59 },
+                    { name: 'Amazon.com SVCS LLC', count: 524, volume: 92439.84 },
+                    { name: 'INSTACART', count: 371, volume: 90866.12 },
+                    { name: 'Amazon Logistics', count: 688, volume: 87893.94 },
+                    { name: 'UBER USA LLC', count: 337, volume: 73577.33 }
                 ]
             },
-            // Last 60 Days (Sep 7 - Nov 6, 2025)
+            // Last 60 Days: Sep 7 - Nov 6, 2025
             '2025-09-07_2025-11-06': {
                 summary: {
                     uniqueUsers: 14454,
                     totalTransactions: 72935,
-                    totalVolume: 56299541.66,
+                    totalVolume: 56301077.66,
                     avgDeposit: 771.91
                 },
                 buckets: [
-                    { range: '$1-$250', count: 14159 },
-                    { range: '$250-$500', count: 9542 },
-                    { range: '$500-$750', count: 16226 },
-                    { range: '$750-$1,000', count: 12898 },
-                    { range: '$1,000-$1,500', count: 13196 },
-                    { range: '$1,500-$2,500', count: 5950 },
-                    { range: '$2,500+', count: 964 }
+                    { range: '$1-$250', count: 14463 },
+                    { range: '$250-$500', count: 9420 },
+                    { range: '$500-$750', count: 8153 },
+                    { range: '$750-$1,000', count: 11061 },
+                    { range: '$1,000-$1,500', count: 16720 },
+                    { range: '$1,500-$2,500', count: 10755 },
+                    { range: '$2,500+', count: 2363 }
                 ],
                 topByFrequency: [
-                    { name: 'DoorDash, Inc.', count: 1504, volume: 315979.33 },
-                    { name: 'Amazon Logistics', count: 1212, volume: 260358.58 },
-                    { name: 'WELLS FARGO IFI', count: 1180, volume: 409878.67 },
-                    { name: 'JPMorgan Chase', count: 837, volume: 207192.82 },
-                    { name: 'UBER USA 6787', count: 808, volume: 268490.61 },
-                    { name: 'DAILYPAY', count: 728, volume: 263725.97 },
-                    { name: 'CARD SERVICES', count: 404, volume: 123616.19 },
-                    { name: 'STRIPE', count: 360, volume: 46779.09 },
-                    { name: 'VIAMERICAS CORP', count: 338, volume: 90055.10 },
-                    { name: 'ARA-1', count: 302, volume: 196401.74 }
+                    { name: 'DoorDash, Inc.', count: 1666, volume: 360012.13 },
+                    { name: 'Amazon Logistics', count: 1404, volume: 178879.48 },
+                    { name: 'WELLS FARGO IFI', count: 1166, volume: 411551.91 },
+                    { name: 'Amazon.com SVCS LLC', count: 1020, volume: 180198.79 },
+                    { name: 'INSTACART', count: 766, volume: 187965.29 },
+                    { name: 'JPMorgan Chase Bank', count: 759, volume: 283389.02 },
+                    { name: 'INSTACART INC', count: 734, volume: 263071.50 },
+                    { name: 'JPMORGAN CHASE', count: 688, volume: 307636.81 },
+                    { name: 'DAILYPAY', count: 663, volume: 263046.68 },
+                    { name: 'UBER USA LLC', count: 657, volume: 143375.46 }
                 ],
                 topByVolume: [
-                    { name: 'WELLS FARGO IFI', count: 1180, volume: 409878.67 },
-                    { name: 'DoorDash, Inc.', count: 1504, volume: 315979.33 },
-                    { name: 'UBER USA 6787', count: 808, volume: 268490.61 },
-                    { name: 'DAILYPAY', count: 728, volume: 263725.97 },
-                    { name: 'Amazon Logistics', count: 1212, volume: 260358.58 },
-                    { name: 'MM HR PAYROLL', count: 261, volume: 227680.55 },
-                    { name: 'TEAM MEMBERS', count: 211, volume: 226588.44 },
-                    { name: 'JPMorgan Chase', count: 837, volume: 207192.82 },
-                    { name: 'ARA-1', count: 302, volume: 196401.74 },
-                    { name: 'SSA TREAS 310', count: 155, volume: 174464.34 }
+                    { name: 'WELLS FARGO IFI', count: 1166, volume: 411551.91 },
+                    { name: 'DoorDash, Inc.', count: 1666, volume: 360012.13 },
+                    { name: 'JPMORGAN CHASE', count: 688, volume: 307636.81 },
+                    { name: 'JPMorgan Chase Bank', count: 759, volume: 283389.02 },
+                    { name: 'INSTACART INC', count: 734, volume: 263071.50 },
+                    { name: 'DAILYPAY', count: 663, volume: 263046.68 },
+                    { name: 'INSTACART', count: 766, volume: 187965.29 },
+                    { name: 'Amazon.com SVCS LLC', count: 1020, volume: 180198.79 },
+                    { name: 'Amazon Logistics', count: 1404, volume: 178879.48 },
+                    { name: 'UBER USA LLC', count: 657, volume: 143375.46 }
                 ]
             },
-            // Last 90 Days (Aug 8 - Nov 6, 2025)
+            // Last 90 Days: Aug 8 - Nov 6, 2025
             '2025-08-08_2025-11-06': {
                 summary: {
                     uniqueUsers: 16709,
                     totalTransactions: 112720,
-                    totalVolume: 87511039.48,
+                    totalVolume: 87513733.63,
                     avgDeposit: 776.36
                 },
                 buckets: [
-                    { range: '$1-$250', count: 21153 },
-                    { range: '$250-$500', count: 14717 },
-                    { range: '$500-$750', count: 25270 },
-                    { range: '$750-$1,000', count: 20308 },
-                    { range: '$1,000-$1,500', count: 20595 },
-                    { range: '$1,500-$2,500', count: 9216 },
-                    { range: '$2,500+', count: 1461 }
+                    { range: '$1-$250', count: 22429 },
+                    { range: '$250-$500', count: 14608 },
+                    { range: '$500-$750', count: 12581 },
+                    { range: '$750-$1,000', count: 17054 },
+                    { range: '$1,000-$1,500', count: 25825 },
+                    { range: '$1,500-$2,500', count: 16582 },
+                    { range: '$2,500+', count: 3641 }
                 ],
                 topByFrequency: [
-                    { name: 'DoorDash, Inc.', count: 2213, volume: 464558.13 },
-                    { name: 'WELLS FARGO IFI', count: 1818, volume: 615042.03 },
-                    { name: 'Amazon Logistics', count: 1658, volume: 352728.63 },
-                    { name: 'JPMorgan Chase', count: 1317, volume: 334319.60 },
-                    { name: 'UBER USA 6787', count: 1258, volume: 385675.81 },
-                    { name: 'DAILYPAY', count: 1106, volume: 402278.60 },
-                    { name: 'CARD SERVICES', count: 590, volume: 189419.71 },
-                    { name: 'STRIPE', count: 508, volume: 66993.72 },
-                    { name: 'VIAMERICAS CORP', count: 494, volume: 128042.45 },
-                    { name: 'ARA-1', count: 474, volume: 305116.52 }
+                    { name: 'DoorDash, Inc.', count: 2616, volume: 566527.10 },
+                    { name: 'Amazon Logistics', count: 2176, volume: 277493.50 },
+                    { name: 'WELLS FARGO IFI', count: 1835, volume: 649078.28 },
+                    { name: 'Amazon.com SVCS LLC', count: 1582, volume: 279791.09 },
+                    { name: 'INSTACART', count: 1205, volume: 296481.03 },
+                    { name: 'JPMorgan Chase Bank', count: 1196, volume: 446875.21 },
+                    { name: 'INSTACART INC', count: 1151, volume: 413166.56 },
+                    { name: 'JPMORGAN CHASE', count: 1076, volume: 482177.05 },
+                    { name: 'DAILYPAY', count: 1047, volume: 415194.27 },
+                    { name: 'UBER USA LLC', count: 1021, volume: 222722.97 }
                 ],
                 topByVolume: [
-                    { name: 'WELLS FARGO IFI', count: 1818, volume: 615042.03 },
-                    { name: 'DoorDash, Inc.', count: 2213, volume: 464558.13 },
-                    { name: 'DAILYPAY', count: 1106, volume: 402278.60 },
-                    { name: 'UBER USA 6787', count: 1258, volume: 385675.81 },
-                    { name: 'Amazon Logistics', count: 1658, volume: 352728.63 },
-                    { name: 'TEAM MEMBERS', count: 321, volume: 347448.91 },
-                    { name: 'MM HR PAYROLL', count: 399, volume: 344139.27 },
-                    { name: 'JPMorgan Chase', count: 1317, volume: 334319.60 },
-                    { name: 'ARA-1', count: 474, volume: 305116.52 },
-                    { name: 'ADP TOTALSOURCE', count: 241, volume: 261396.59 }
+                    { name: 'WELLS FARGO IFI', count: 1835, volume: 649078.28 },
+                    { name: 'DoorDash, Inc.', count: 2616, volume: 566527.10 },
+                    { name: 'JPMORGAN CHASE', count: 1076, volume: 482177.05 },
+                    { name: 'JPMorgan Chase Bank', count: 1196, volume: 446875.21 },
+                    { name: 'DAILYPAY', count: 1047, volume: 415194.27 },
+                    { name: 'INSTACART INC', count: 1151, volume: 413166.56 },
+                    { name: 'INSTACART', count: 1205, volume: 296481.03 },
+                    { name: 'Amazon.com SVCS LLC', count: 1582, volume: 279791.09 },
+                    { name: 'Amazon Logistics', count: 2176, volume: 277493.50 },
+                    { name: 'UBER USA LLC', count: 1021, volume: 222722.97 }
                 ]
             },
-            // October 2025 (Oct 1-31, 2025)
+            // October 2025: Oct 1-31, 2025
             '2025-10-01_2025-10-31': {
                 summary: {
                     uniqueUsers: 12511,
                     totalTransactions: 42949,
-                    totalVolume: 33925519.14,
+                    totalVolume: 33933269.95,
                     avgDeposit: 789.90
                 },
                 buckets: [
-                    { range: '$1-$250', count: 5234 },
-                    { range: '$250-$500', count: 8912 },
-                    { range: '$500-$750', count: 11456 },
-                    { range: '$750-$1,000', count: 9876 },
-                    { range: '$1,000-$1,500', count: 4821 },
-                    { range: '$1,500-$2,500', count: 1876 },
-                    { range: '$2,500+', count: 774 }
+                    { range: '$1-$250', count: 8282 },
+                    { range: '$250-$500', count: 5582 },
+                    { range: '$500-$750', count: 4803 },
+                    { range: '$750-$1,000', count: 6526 },
+                    { range: '$1,000-$1,500', count: 9869 },
+                    { range: '$1,500-$2,500', count: 6335 },
+                    { range: '$2,500+', count: 1552 }
                 ],
                 topByFrequency: [
-                    { name: 'DoorDash, Inc.', count: 687, volume: 145676.88 },
-                    { name: 'Amazon Logistics', count: 665, volume: 141879.30 },
-                    { name: 'WELLS FARGO IFI', count: 596, volume: 206387.93 },
-                    { name: 'DAILYPAY', count: 436, volume: 148600.10 },
-                    { name: 'JPMorgan Chase', count: 415, volume: 103627.06 },
-                    { name: 'UBER USA 6787', count: 303, volume: 106591.18 },
-                    { name: 'STRIPE', count: 194, volume: 26120.38 },
-                    { name: 'CARD SERVICES', count: 194, volume: 56402.00 },
-                    { name: 'ARA-1', count: 186, volume: 123019.59 },
-                    { name: 'VIAMERICAS CORP', count: 174, volume: 49952.00 }
+                    { name: 'DoorDash, Inc.', count: 993, volume: 214206.41 },
+                    { name: 'Amazon Logistics', count: 794, volume: 101324.49 },
+                    { name: 'WELLS FARGO IFI', count: 663, volume: 232498.01 },
+                    { name: 'Amazon.com SVCS LLC', count: 612, volume: 107989.39 },
+                    { name: 'INSTACART', count: 432, volume: 105804.95 },
+                    { name: 'JPMorgan Chase Bank', count: 431, volume: 160711.93 },
+                    { name: 'INSTACART INC', count: 424, volume: 152046.74 },
+                    { name: 'JPMORGAN CHASE', count: 403, volume: 180536.85 },
+                    { name: 'DAILYPAY', count: 384, volume: 152283.96 },
+                    { name: 'UBER USA LLC', count: 380, volume: 82931.15 }
                 ],
                 topByVolume: [
-                    { name: 'WELLS FARGO IFI', count: 596, volume: 206387.93 },
-                    { name: 'TEAM MEMBERS', count: 156, volume: 168899.48 },
-                    { name: 'DAILYPAY', count: 436, volume: 148600.10 },
-                    { name: 'DoorDash, Inc.', count: 687, volume: 145676.88 },
-                    { name: 'Amazon Logistics', count: 665, volume: 141879.30 },
-                    { name: 'SSI TREAS 310', count: 161, volume: 135144.40 },
-                    { name: 'MM HR PAYROLL', count: 152, volume: 132104.71 },
-                    { name: 'ARA-1', count: 186, volume: 123019.59 },
-                    { name: 'UBER USA 6787', count: 303, volume: 106591.18 },
-                    { name: 'ATLANTA STAFFING', count: 102, volume: 106466.30 }
+                    { name: 'WELLS FARGO IFI', count: 663, volume: 232498.01 },
+                    { name: 'DoorDash, Inc.', count: 993, volume: 214206.41 },
+                    { name: 'JPMORGAN CHASE', count: 403, volume: 180536.85 },
+                    { name: 'JPMorgan Chase Bank', count: 431, volume: 160711.93 },
+                    { name: 'DAILYPAY', count: 384, volume: 152283.96 },
+                    { name: 'INSTACART INC', count: 424, volume: 152046.74 },
+                    { name: 'Amazon.com SVCS LLC', count: 612, volume: 107989.39 },
+                    { name: 'INSTACART', count: 432, volume: 105804.95 },
+                    { name: 'Amazon Logistics', count: 794, volume: 101324.49 },
+                    { name: 'UBER USA LLC', count: 380, volume: 82931.15 }
                 ]
             }
         };
-
-        let charts = {};
-
-        function formatCurrency(amount) {
-            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function formatNumber(num) {
-            return num.toLocaleString('en-US');
-        }
 
         function setPreset(days) {
             const endDate = new Date();
             const startDate = new Date();
             startDate.setDate(endDate.getDate() - days);
-
+            
             document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
             document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
-
+            
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+            
+            updateData();
         }
 
-        function setOctober2025() {
+        function setOctoberPreset() {
             document.getElementById('startDate').value = '2025-10-01';
             document.getElementById('endDate').value = '2025-10-31';
-
+            
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+            
+            updateData();
         }
 
         function updateData() {
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const cacheKey = `${startDate}_${endDate}`;
-
-            // In production, this would make an API call to fetch data
-            // For now, we check if we have cached data for the selected range
+            
             let data = dataCache[cacheKey];
-
+            
             if (!data) {
-                // If no data for selected range, default to October 2025 data
+                // Fallback to October 2025 if no data available
                 data = dataCache['2025-10-01_2025-10-31'];
-
-                // Reset date inputs to October 2025
                 document.getElementById('startDate').value = '2025-10-01';
                 document.getElementById('endDate').value = '2025-10-31';
-
-                // Update button active state
                 document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.preset-btn')[3].classList.add('active'); // October 2025 button
+                document.querySelectorAll('.preset-btn')[3].classList.add('active');
             }
-
+            
             updateSummaryCards(data.summary);
             updateCharts(data);
         }
@@ -555,12 +540,13 @@
 
         function updateCharts(data) {
             // Destroy existing charts
-            Object.values(charts).forEach(chart => chart.destroy());
-            charts = {};
+            if (bucketsChartInstance) bucketsChartInstance.destroy();
+            if (frequencyChartInstance) frequencyChartInstance.destroy();
+            if (volumeChartInstance) volumeChartInstance.destroy();
 
-            // Amount Buckets Chart
-            const bucketsCtx = document.getElementById('amountBucketsChart').getContext('2d');
-            charts.buckets = new Chart(bucketsCtx, {
+            // Create buckets chart
+            const bucketsCtx = document.getElementById('bucketsChart').getContext('2d');
+            bucketsChartInstance = new Chart(bucketsCtx, {
                 type: 'bar',
                 data: {
                     labels: data.buckets.map(b => b.range),
@@ -569,41 +555,33 @@
                         data: data.buckets.map(b => b.count),
                         backgroundColor: 'rgba(102, 126, 234, 0.8)',
                         borderColor: 'rgba(102, 126, 234, 1)',
-                        borderWidth: 2,
-                        borderRadius: 8
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return formatNumber(context.parsed.y) + ' transactions';
-                                }
-                            }
-                        }
-                    },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
-                                    return formatNumber(value);
+                                    return value.toLocaleString();
                                 }
                             }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
                         }
                     }
                 }
             });
 
-            // Top 10 by Frequency Chart
+            // Create frequency chart
             const frequencyCtx = document.getElementById('frequencyChart').getContext('2d');
-            charts.frequency = new Chart(frequencyCtx, {
+            frequencyChartInstance = new Chart(frequencyCtx, {
                 type: 'bar',
                 data: {
                     labels: data.topByFrequency.map(i => i.name),
@@ -612,58 +590,54 @@
                         data: data.topByFrequency.map(i => i.count),
                         backgroundColor: 'rgba(118, 75, 162, 0.8)',
                         borderColor: 'rgba(118, 75, 162, 1)',
-                        borderWidth: 2,
-                        borderRadius: 8
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    },
                     plugins: {
                         legend: {
                             display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return formatNumber(context.parsed.x) + ' transactions';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return formatNumber(value);
-                                }
-                            }
                         }
                     }
                 }
             });
 
-            // Top 10 by Volume Chart
+            // Create volume chart
             const volumeCtx = document.getElementById('volumeChart').getContext('2d');
-            charts.volume = new Chart(volumeCtx, {
+            volumeChartInstance = new Chart(volumeCtx, {
                 type: 'bar',
                 data: {
                     labels: data.topByVolume.map(i => i.name),
                     datasets: [{
-                        label: 'Total Volume',
+                        label: 'Transaction Volume ($)',
                         data: data.topByVolume.map(i => i.volume),
                         backgroundColor: 'rgba(102, 126, 234, 0.8)',
                         borderColor: 'rgba(102, 126, 234, 1)',
-                        borderWidth: 2,
-                        borderRadius: 8
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                }
+                            }
+                        }
+                    },
                     plugins: {
                         legend: {
                             display: false
@@ -671,17 +645,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return formatCurrency(context.parsed.x);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + (value/1000).toFixed(0) + 'K';
+                                    return '$' + context.parsed.x.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
                                 }
                             }
                         }
@@ -690,10 +654,21 @@
             });
         }
 
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        function formatCurrency(num) {
+            if (num >= 1000000) {
+                return '$' + (num / 1000000).toFixed(1) + 'M';
+            }
+            return '$' + num.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
         // Initialize with October 2025 data
-        window.addEventListener('load', function() {
+        window.onload = function() {
             updateData();
-        });
+        };
     </script>
 </body>
 </html>
