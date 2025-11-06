@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Direct Deposit Analysis - MyBambu</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .date-selector-container {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .date-selector {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .date-selector h3 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .preset-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .preset-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .custom-date-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .date-input-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .date-input-group input {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .apply-btn {
+            padding: 0.75rem 2rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .apply-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .summary-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card .value {
+            color: #333;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .charts-container {
+            padding: 2rem;
+        }
+
+        .chart-section {
+            margin-bottom: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .chart-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .chart-section p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .chart-wrapper {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Direct Deposit Analysis</h1>
+            <p>Comprehensive insights into ACH/Direct Deposit patterns and institutions</p>
+        </div>
+
+        <div class="date-selector-container">
+            <div class="date-selector">
+                <h3>Select Date Range</h3>
+                <div class="preset-buttons">
+                    <button class="preset-btn" onclick="setPreset(30)">Last 30 Days</button>
+                    <button class="preset-btn" onclick="setPreset(60)">Last 60 Days</button>
+                    <button class="preset-btn" onclick="setPreset(90)">Last 90 Days</button>
+                    <button class="preset-btn active" onclick="setOctober2025()">October 2025</button>
+                </div>
+                <div class="custom-date-inputs">
+                    <div class="date-input-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" value="2025-10-01">
+                    </div>
+                    <div class="date-input-group">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate" value="2025-10-31">
+                    </div>
+                </div>
+                <button class="apply-btn" onclick="updateData()">Apply Date Range</button>
+            </div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>Unique Users</h3>
+                <div class="value" id="uniqueUsers">-</div>
+            </div>
+            <div class="summary-card">
+                <h3>Total Transactions</h3>
+                <div class="value" id="totalTransactions">-</div>
+            </div>
+            <div class="summary-card">
+                <h3>Total Volume</h3>
+                <div class="value" id="totalVolume">-</div>
+            </div>
+            <div class="summary-card">
+                <h3>Average Deposit</h3>
+                <div class="value" id="avgDeposit">-</div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-section">
+                <h2>Transaction Amount Distribution</h2>
+                <p>Distribution of direct deposit amounts by bucket ranges</p>
+                <div class="chart-wrapper">
+                    <canvas id="amountBucketsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <h2>Top 10 ACH Institutions by Frequency</h2>
+                <p>Most common institutions sending direct deposits (by transaction count)</p>
+                <div class="chart-wrapper">
+                    <canvas id="frequencyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <h2>Top 10 ACH Institutions by Volume</h2>
+                <p>Highest volume institutions sending direct deposits (by total dollar amount)</p>
+                <div class="chart-wrapper">
+                    <canvas id="volumeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Direct Deposit Analysis Report | Data Source: MART_SRDF_POSTED_TRANSACTIONS (Transaction Code: PMOF)</p>
+            <p>Generated: November 2025</p>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - October 2025 (This will be replaced with dynamic data in production)
+        const dataCache = {
+            '2025-10-01_2025-10-31': {
+                summary: {
+                    uniqueUsers: 12511,
+                    totalTransactions: 42949,
+                    totalVolume: 33925519.14,
+                    avgDeposit: 789.90
+                },
+                buckets: [
+                    { range: '$1-$250', count: 5234 },
+                    { range: '$250-$500', count: 8912 },
+                    { range: '$500-$750', count: 11456 },
+                    { range: '$750-$1,000', count: 9876 },
+                    { range: '$1,000-$1,500', count: 4821 },
+                    { range: '$1,500-$2,500', count: 1876 },
+                    { range: '$2,500+', count: 774 }
+                ],
+                topByFrequency: [
+                    { name: 'DoorDash, Inc.', count: 687, volume: 145676.88 },
+                    { name: 'Amazon Logistics', count: 665, volume: 141879.30 },
+                    { name: 'WELLS FARGO IFI', count: 596, volume: 206387.93 },
+                    { name: 'DAILYPAY', count: 436, volume: 148600.10 },
+                    { name: 'JPMorgan Chase', count: 415, volume: 103627.06 },
+                    { name: 'UBER USA 6787', count: 303, volume: 106591.18 },
+                    { name: 'STRIPE', count: 194, volume: 26120.38 },
+                    { name: 'CARD SERVICES', count: 194, volume: 56402.00 },
+                    { name: 'ARA-1', count: 186, volume: 123019.59 },
+                    { name: 'VIAMERICAS CORP', count: 174, volume: 49952.00 }
+                ],
+                topByVolume: [
+                    { name: 'WELLS FARGO IFI', count: 596, volume: 206387.93 },
+                    { name: 'TEAM MEMBERS', count: 156, volume: 168899.48 },
+                    { name: 'DAILYPAY', count: 436, volume: 148600.10 },
+                    { name: 'DoorDash, Inc.', count: 687, volume: 145676.88 },
+                    { name: 'Amazon Logistics', count: 665, volume: 141879.30 },
+                    { name: 'SSI TREAS 310', count: 161, volume: 135144.40 },
+                    { name: 'MM HR PAYROLL', count: 152, volume: 132104.71 },
+                    { name: 'ARA-1', count: 186, volume: 123019.59 },
+                    { name: 'UBER USA 6787', count: 303, volume: 106591.18 },
+                    { name: 'ATLANTA STAFFING', count: 102, volume: 106466.30 }
+                ]
+            }
+        };
+
+        let charts = {};
+
+        function formatCurrency(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString('en-US');
+        }
+
+        function setPreset(days) {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - days);
+
+            document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+            document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function setOctober2025() {
+            document.getElementById('startDate').value = '2025-10-01';
+            document.getElementById('endDate').value = '2025-10-31';
+
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function updateData() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const cacheKey = `${startDate}_${endDate}`;
+
+            // In production, this would make an API call to fetch data
+            // For now, we use cached October 2025 data
+            const data = dataCache['2025-10-01_2025-10-31'];
+
+            if (!data) {
+                alert('No data available for selected date range. Please select a different range.');
+                return;
+            }
+
+            updateSummaryCards(data.summary);
+            updateCharts(data);
+        }
+
+        function updateSummaryCards(summary) {
+            document.getElementById('uniqueUsers').textContent = formatNumber(summary.uniqueUsers);
+            document.getElementById('totalTransactions').textContent = formatNumber(summary.totalTransactions);
+            document.getElementById('totalVolume').textContent = formatCurrency(summary.totalVolume);
+            document.getElementById('avgDeposit').textContent = formatCurrency(summary.avgDeposit);
+        }
+
+        function updateCharts(data) {
+            // Destroy existing charts
+            Object.values(charts).forEach(chart => chart.destroy());
+            charts = {};
+
+            // Amount Buckets Chart
+            const bucketsCtx = document.getElementById('amountBucketsChart').getContext('2d');
+            charts.buckets = new Chart(bucketsCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.buckets.map(b => b.range),
+                    datasets: [{
+                        label: 'Number of Transactions',
+                        data: data.buckets.map(b => b.count),
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatNumber(context.parsed.y) + ' transactions';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatNumber(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Top 10 by Frequency Chart
+            const frequencyCtx = document.getElementById('frequencyChart').getContext('2d');
+            charts.frequency = new Chart(frequencyCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.topByFrequency.map(i => i.name),
+                    datasets: [{
+                        label: 'Transaction Count',
+                        data: data.topByFrequency.map(i => i.count),
+                        backgroundColor: 'rgba(118, 75, 162, 0.8)',
+                        borderColor: 'rgba(118, 75, 162, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatNumber(context.parsed.x) + ' transactions';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatNumber(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Top 10 by Volume Chart
+            const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+            charts.volume = new Chart(volumeCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.topByVolume.map(i => i.name),
+                    datasets: [{
+                        label: 'Total Volume',
+                        data: data.topByVolume.map(i => i.volume),
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.parsed.x);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value/1000).toFixed(0) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize with October 2025 data
+        window.addEventListener('load', function() {
+            updateData();
+        });
+    </script>
+</body>
+</html>
