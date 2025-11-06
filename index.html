@@ -400,11 +400,19 @@
 
             // In production, this would make an API call to fetch data
             // For now, we check if we have cached data for the selected range
-            const data = dataCache[cacheKey];
+            let data = dataCache[cacheKey];
 
             if (!data) {
-                alert('No data available for selected date range. Currently only October 2025 data is available. Please select October 1-31, 2025.');
-                return;
+                // If no data for selected range, default to October 2025 data
+                data = dataCache['2025-10-01_2025-10-31'];
+
+                // Reset date inputs to October 2025
+                document.getElementById('startDate').value = '2025-10-01';
+                document.getElementById('endDate').value = '2025-10-31';
+
+                // Update button active state
+                document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.preset-btn')[3].classList.add('active'); // October 2025 button
             }
 
             updateSummaryCards(data.summary);
