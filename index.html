@@ -15,7 +15,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -30,7 +30,7 @@
         }
 
         header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             color: white;
             padding: 40px;
             text-align: center;
@@ -60,7 +60,7 @@
         }
 
         .date-selector h2 {
-            color: #1e293b;
+            color: #1e40af;
             margin-bottom: 20px;
             font-size: 1.5em;
         }
@@ -74,9 +74,9 @@
         .preset-btn {
             padding: 14px 20px;
             background: white;
-            border: 2px solid #1e293b;
+            border: 2px solid #1e40af;
             border-radius: 8px;
-            color: #1e293b;
+            color: #1e40af;
             cursor: pointer;
             font-size: 1em;
             font-weight: 600;
@@ -84,14 +84,14 @@
         }
 
         .preset-btn:hover {
-            background: #1e293b;
+            background: #1e40af;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         .preset-btn.active {
-            background: #1e293b;
+            background: #1e40af;
             color: white;
         }
 
@@ -103,7 +103,7 @@
         }
 
         .card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             padding: 25px;
             border-radius: 12px;
             color: white;
@@ -132,7 +132,7 @@
         }
 
         .chart-section h2 {
-            color: #1e293b;
+            color: #1e40af;
             margin-bottom: 20px;
             font-size: 1.5em;
         }
@@ -460,8 +460,8 @@
                     datasets: [{
                         label: 'Number of Transactions',
                         data: data.buckets.map(b => b.count),
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
-                        borderColor: 'rgba(30, 41, 59, 1)',
+                        backgroundColor: 'rgba(30, 64, 175, 0.8)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
                         borderWidth: 2
                     }]
                 },
@@ -495,8 +495,8 @@
                     datasets: [{
                         label: 'Transaction Count',
                         data: data.topByFrequency.map(i => i.count),
-                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                        borderColor: 'rgba(15, 23, 42, 1)',
+                        backgroundColor: 'rgba(29, 78, 216, 0.8)',
+                        borderColor: 'rgba(29, 78, 216, 1)',
                         borderWidth: 2
                     }]
                 },
@@ -526,8 +526,8 @@
                     datasets: [{
                         label: 'Transaction Volume ($)',
                         data: data.topByVolume.map(i => i.volume),
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
-                        borderColor: 'rgba(30, 41, 59, 1)',
+                        backgroundColor: 'rgba(30, 64, 175, 0.8)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
                         borderWidth: 2
                     }]
                 },
