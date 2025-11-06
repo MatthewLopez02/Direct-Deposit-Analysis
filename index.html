@@ -313,7 +313,7 @@
 
         <div class="footer">
             <p>Direct Deposit Analysis Report | Data Source: MART_SRDF_POSTED_TRANSACTIONS (Transaction Code: PMOF)</p>
-            <p>Generated: November 2025</p>
+            <p>Created by: Paid Ads Team | Generated: November 2025</p>
         </div>
     </div>
 
@@ -399,11 +399,11 @@
             const cacheKey = `${startDate}_${endDate}`;
 
             // In production, this would make an API call to fetch data
-            // For now, we use cached October 2025 data
-            const data = dataCache['2025-10-01_2025-10-31'];
+            // For now, we check if we have cached data for the selected range
+            const data = dataCache[cacheKey];
 
             if (!data) {
-                alert('No data available for selected date range. Please select a different range.');
+                alert('No data available for selected date range. Currently only October 2025 data is available. Please select October 1-31, 2025.');
                 return;
             }
 
