@@ -273,12 +273,12 @@ KEY CALCULATIONS:
 3. Top Institutions by Frequency:
    - Groups by ACH_INSTITUTION_NAME
    - Orders by COUNT(*) DESC
-   - Shows top 10 institutions (or top 20 for staffing agencies only view)
+   - Shows top 10 institutions
 
 4. Top Institutions by Volume:
    - Groups by ACH_INSTITUTION_NAME
    - Orders by SUM(TRANSACTION_AMOUNT) DESC
-   - Shows top 10 institutions (or top 20 for staffing agencies only view)
+   - Shows top 10 institutions
 
 5. Company Type Categorization:
    - Institutions are mapped to categories:
@@ -302,7 +302,7 @@ KEY CALCULATIONS:
      * Verified business type through company websites, LinkedIn, industry databases
      * Categorized as staffing agency if primary business is workforce/staffing/recruitment
 
-   - Staffing Agencies Identified (26 total):
+   - Staffing Agencies Identified (26 total active in last 90 days):
      * Already in mapping (6 still active): ATLANTA STAFFING, Kamps Inc.-OSV, LUXOR STAFFING,
        Drive Staff Inc, PEOPLEASE, LEADERS STAFFING
      * New additions (20): Staffing Partner, Medix, TEAM EASYSTAFF, HIRE Dynamics, People 2.0,
@@ -311,6 +311,7 @@ KEY CALCULATIONS:
        Career Group, Adecco, LaborMax Staffin
      * Kept in mapping for historical data (6 inactive): ARC TALENT SOLUT, EMP SERV LLC,
        WWR PLACEMENT, SENTRY LLC, ESSG II (500), 3 PROMISE LABOR
+     * Note: Only 10 agencies had transactions in the last 90 days (shown in scrolling list)
 
    - Filtering Logic for Staffing-Only View:
      * Uses INNER JOIN with staffing_agencies CTE
@@ -337,6 +338,7 @@ KNOWN LIMITATIONS:
 - Company type categorization is based on predefined mapping (may need updates for new institutions)
 - Staffing agency identification is based on Nov 12, 2025 research; new agencies may emerge
 - Pattern matching for staffing agencies may occasionally include false positives
+- Only agencies with actual transactions appear in the All Staffing Agencies list
 
 SAMPLE QUERY TEMPLATE FOR STAFFING AGENCIES ONLY:
 WITH staffing_agencies AS (
@@ -359,8 +361,9 @@ NOTES:
 - Date range selector buttons use static date mappings to ensure consistency
 - Each preset button maps to specific start/end dates in presetDates object
 - Chart instances are destroyed and recreated on data updates to prevent memory leaks
-- Staffing-only view replaces company type pie chart with list of top 20 staffing agencies
+- Staffing-only view replaces company type pie chart with scrolling list of all identified staffing agencies
 - Staffing agency list shows both frequency and volume metrics for transparency
+- Charts show top 10 agencies by frequency and volume respectively
 
 ========================================
 -->
@@ -416,7 +419,7 @@ NOTES:
             </div>
 
             <div class="chart-section" id="staffingListSection" style="display: none;">
-                <h2>Top 20 Staffing Agencies</h2>
+                <h2>All Staffing Agencies Identified</h2>
                 <div class="staffing-list" id="staffingList"></div>
             </div>
 
@@ -596,15 +599,33 @@ NOTES:
 
             // Update chart titles
             document.getElementById('frequencyChartTitle').textContent = isStaffingView
-                ? 'Top 20 Staffing Agencies by Frequency'
+                ? 'Top 10 Staffing Agencies by Frequency'
                 : 'Top 10 ACH Institutions by Frequency';
             document.getElementById('volumeChartTitle').textContent = isStaffingView
-                ? 'Top 20 Staffing Agencies by Volume'
+                ? 'Top 10 Staffing Agencies by Volume'
                 : 'Top 10 ACH Institutions by Volume';
 
             if (isStaffingView) {
-                // Render staffing agency list
-                renderStaffingList(data.topByFrequency);
+                // Render staffing agency list - combine both frequency and volume data to show all agencies
+                const allAgencies = [];
+                const agencyMap = new Map();
+
+                // Add from frequency list
+                data.topByFrequency.forEach(agency => {
+                    agencyMap.set(agency.name.trim(), agency);
+                });
+
+                // Add from volume list (in case there are any not in frequency)
+                data.topByVolume.forEach(agency => {
+                    const name = agency.name.trim();
+                    if (!agencyMap.has(name)) {
+                        agencyMap.set(name, agency);
+                    }
+                });
+
+                // Convert to array and sort by frequency
+                const allAgenciesArray = Array.from(agencyMap.values()).sort((a, b) => b.count - a.count);
+                renderStaffingList(allAgenciesArray);
             } else {
                 // Company Type Pie Chart
                 const companyBreakdown = calculateCompanyTypeBreakdown(data.topByVolume);
